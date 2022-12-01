@@ -1,15 +1,17 @@
 // ==UserScript==
-// @name         eh漫画语言快捷按钮
+// @name         EH语言快捷按钮
 // @namespace    com.xioxin.translatedJump
 // @version      0.6
 // @description  快速跳转到其他漫画语言版本
 // @author       xioxin
 // @homepage     https://github.com/EhTagTranslation/UserScripts
 // @supportURL   https://github.com/EhTagTranslation/UserScripts/issues
-// @include     *://exhentai.org/g/*
-// @include     *://e-hentai.org/g/*
-// @grant    GM_addStyle
+// @match        *://exhentai.org/g/*
+// @match        *://e-hentai.org/g/*
+// @icon         https://e-hentai.org/favicon.ico
+// @grant        GM_addStyle
 // ==/UserScript==
+
 const languagePriority = ['chinese', 'japanese', 'english'];
 const languages = `
 albanian 阿尔巴尼亚语 data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzIgNzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTUgMTdoNjJ2MzhINXoiLz48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNNSAxN2g2MnYzOEg1eiIvPjwvc3ZnPg==
@@ -55,7 +57,7 @@ text_cleaned 文字清除 data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzIg
 rewrite 重写 data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzIgNzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTE2LjQwNSAxMS4zNzhINTUuOTd2NDkuMDY2SDE2LjQwNXoiLz48cGF0aCBmaWxsPSIjZjRhYTQxIiBkPSJNMzkuOTMxIDQwLjIyMmwxMS4yOTQtMTEuMjk0IDcuMzc2IDcuMzc2LTExLjE5OCAxMS4xOTgiLz48cGF0aCBmaWxsPSIjYTU3OTM5IiBkPSJNMzcuOTQxIDQ2LjgxOWwxLjk2MS01LjY0OSA2LjQ1NCA2LjQ1NC01LjY0OCAxLjk2Ii8+PHBhdGggZmlsbD0iI0VBNUE0NyIgZD0iTTU0LjYwOSAyNS4wNTJsMy45NzgtMy45NzkgNy44NTkgNy44NTktMy45NDUgMy45NDUiLz48cGF0aCBmaWxsPSIjZDBjZmNlIiBkPSJNNTAuNDk0IDI5LjY2bDQuNjA4LTQuNjA4IDcuMzc1IDcuMzc1LTQuNTY4IDQuNTY5Ii8+PGc+PHBhdGggZD0iTTM4LjA3IDQ3LjE5MWwyLjM4NiAyLjM4Ni0zLjQ2NCAxLjI4eiIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTIyLjMyMiAxOS44NzVoMjdNMjIuMzIyIDI3Ljg3NWgyNS42TTIyLjMyMiAzNS44NzVoMTcuMTA5TTIyLjMyMiA0My44NzVoMTIuMjA2TTIyLjMyMiA1MS44NzVoMTAuMTQ2Ii8+PHBhdGggZD0iTTM4LjA3IDQ3LjE5MWwyLjM4NiAyLjM4Ni0zLjQ2NCAxLjI4eiIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTQwLjY5MiA0OS41OTFsNS42NjQtMS45NjcgMTUuNTktMTUuNTktNi40NTQtNi40NTQtMTUuNTkgMTUuNTktMS45NzQgNS42NzF6TTU4LjA4NiAyMi45ODZsMS41NTUtMS41NTUgNi40NTQgNi40NTQtMS42MzIgMS42MzJNNDAuMjc5IDQwLjc5M2w2LjQ1NCA2LjQ1NCIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTM3LjkzMiA0Ni44MjhsLTEuMzgzIDQuMTQ5IDQuMTU5LTEuMzkyTTUxLjMwMiAzMC4xNTdsNi4yMDIgNi4yMDIiLz48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2Utd2lkdGg9IjIuMDIxIiBkPSJNNTUuMzIyIDQ0LjIyOHYxNS42NDdoLTM5di00OGgzOXY4LjQ1NiIvPjwvZz48L3N2Zz4=
 unknown 未知 data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzIgNzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTUgMTdoNjJ2MzhINXoiLz48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNNSAxN2g2MnYzOEg1eiIvPjwvc3ZnPg==`.trim().split('\n').map(v => {
     const [value, name, icon] = v.split(' ');
-    return {value: value.replace('_', ' '), name, icon};
+    return { value: value.replace('_', ' '), name, icon };
 });
 
 GM_addStyle(`
@@ -99,6 +101,9 @@ GM_addStyle(`
 .tj-box .tj-lang-icon ul li {
     padding: 2px 0;
 }
+.tj-box .tj-lang-icon ul li img {
+    margin-bottom: -2px;
+}
 .tj-box a {
     text-decoration: none;
 }
@@ -110,22 +115,30 @@ GM_addStyle(`
 .tj-box ul a.title:visited::before {
     color: #aaa;
 }
-
 `);
 
+function cleanBookName(name) {
+    name = name.replace(/\[.*?\]/gi, '');
+    name = name.replace(/\(.*?\)/gi, '');
+    name = name.replace(/\sCh\.[0-9-]+/gi, '');
+    name = name.replace(/\s第[0-9-]+話/gi, '');
+    name = name.replace(/\s第[0-9-]+话/gi, '');
+    name = name.trim();
+    return name;
+}
 
 async function getDataList(name) {
-    let searchUrl = `${window.location.origin}/?f_search=${encodeURIComponent(`"${name}"`)}`;
+    let searchUrl = window.location.origin + '/?f_search=' + encodeURIComponent(name);
     const response = await fetch(searchUrl);
     const html = await response.text();
-    const safeHtml = html.replace(/^.*<body>(.*)<\/body>.*$/igms,"$1").replace(/<script.*?>(.*?)<\/script>/igms, '');
+    const safeHtml = html.replace(/^.*<body>(.*)<\/body>.*$/igms, "$1").replace(/<script.*?>(.*?)<\/script>/igms, '');
     const dom = document.createElement('div')
     dom.innerHTML = safeHtml;
     const list = [...dom.querySelectorAll('.itg>tbody>tr,.gl1t')];
     let dataList = list.map(e => {
-        if(e.querySelector('.glname') == null) return null;
-        const pagesElement = e.querySelector('div.gl3e div:nth-child(5), div.gl5t > div:nth-child(2) > div:nth-child(2)');
-        const linkElement = e.querySelector('.gl1e a,.glname a,.gl2e a,.gl1t>a');
+        if (e.querySelector('.glname') == null) return null;
+        const pagesElement = e.querySelector('div.gl3e div:nth-child(5), td.gl4c div:nth-child(2), div.gl5t>div:nth-child(2)>div:nth-child(2)');
+        const linkElement = e.querySelector('.gl1e a, .glname a, .gl2e a,.gl1t>a');
         const torrentElement = e.querySelector('.gldown a');
         const titleElement = e.querySelector('.glink');
         return {
@@ -138,17 +151,6 @@ async function getDataList(name) {
         }
     }).filter(v => v);
     return dataList;
-}
-
-
-function cleanBookName(name) {
-    name = name.replace(/\[.*?\]/gi, '');
-    name = name.replace(/\(.*?\)/gi, '');
-    name = name.replace(/\sCh\.[0-9-]+/gi, '');
-    name = name.replace(/\s第[0-9-]+話/gi, '');
-    name = name.replace(/\s第[0-9-]+话/gi, '');
-    name = name.trim();
-    return name;
 }
 
 function minDistance(s1, s2) {
@@ -176,53 +178,56 @@ function minDistance(s1, s2) {
     return matrix[len1][len2]
 }
 
-(async function() {
-    const title1 = document.querySelector("#gn").textContent;
-    const title2 = document.querySelector("#gj").textContent;
+(async function () {
+    // 获取英文及日文标题
+    const title1 = document.querySelector('#gn').textContent;
+    const title2 = document.querySelector('#gj').textContent;
     const cleanTitle1 = cleanBookName(title1);
     const cleanTitle2 = cleanBookName(title2);
-    console.log("搜索相似:", cleanTitle1, '&', cleanTitle2);
+    console.log('搜索相似:', cleanTitle1, '&', cleanTitle2);
+
+    // 搜索相似内容
     const dataList = [];
     const urlSet = new Set([window.location.origin + window.location.pathname]);
-    if(cleanTitle1) {
+    if (cleanTitle1) {
         (await getDataList(cleanTitle1)).forEach(v => {
-            if(!urlSet.has(v.href)) {
+            if (!urlSet.has(v.href)) {
                 dataList.push(v);
                 urlSet.add(v.href);
             }
         });
     }
-    if(cleanTitle2) {
+    if (cleanTitle2) {
         (await getDataList(cleanTitle2)).forEach(v => {
-            if(!urlSet.has(v.href)) {
+            if (!urlSet.has(v.href)) {
                 dataList.push(v);
                 urlSet.add(v.href);
             }
         });
     }
 
-    dataList.sort((a,b) => a.distance - b.distance);
+    dataList.sort((a, b) => a.distance - b.distance);
 
     dataList.forEach(v => {
-        for(let lang of languages) {
-            if(v.tags.length && v.tags.includes(`language:${lang.value}`)) {
+        for (let lang of languages) {
+            if (v.tags.length && v.tags.includes(`language:${lang.value}`)) {
                 v.language = lang;
                 break;
             }
         }
-        if(v.language) return;
+        if (v.language) return;
 
         // 两个循环是因为优先判断tag
-        for(let lang of languages) {
-            if(v.title.toLowerCase().includes(lang.value)) {
+        for (let lang of languages) {
+            if (v.title.toLowerCase().includes(lang.value)) {
                 v.language = lang;
                 break;
             }
         }
-        if(v.language) return;
+        if (v.language) return;
 
         // 没有找到语言的 并且没翻译的默认为日语
-        if(v.tags.length && !v.tags.includes(`language:translated`)) {
+        if (v.tags.length && !v.tags.includes(`language:translated`)) {
             v.language = languages.find(v => v.value == 'japanese');
         } else {
             v.language = languages.find(v => v.value == 'unknown');
@@ -232,26 +237,26 @@ function minDistance(s1, s2) {
     const languageGroupMap = {};
     const languageGroup = [];
     dataList.forEach(v => {
-        if(!languageGroupMap[v.language.value]) {
-            languageGroupMap[v.language.value] = {language: v.language, list: []};
+        if (!languageGroupMap[v.language.value]) {
+            languageGroupMap[v.language.value] = { language: v.language, list: [] };
             languageGroup.push(languageGroupMap[v.language.value]);
         }
         languageGroupMap[v.language.value].list.push(v);
     });
 
-    languageGroup.sort((a,b) => {
+    languageGroup.sort((a, b) => {
         let pa = languagePriority.indexOf(a.language.value);
         let pb = languagePriority.indexOf(b.language.value);
-        if(pa == -1) pa = 999;
-        if(pb == -1) pb = 999;
+        if (pa == -1) pa = 999;
+        if (pb == -1) pb = 999;
         return pa - pb;
     });
 
     const box = document.createElement('div');
-    box.className = `tj-box`;
-    document.querySelector(".gm").appendChild(box);
+    box.className = 'tj-box';
+    document.querySelector('.gm').appendChild(box);
 
-    if(languageGroup.length) {
+    if (languageGroup.length) {
         box.innerHTML = languageGroup.map(group => `
         <div class="tj-lang-icon">
             <a href="${group.list[0].href}" title="${group.language.name}"><img src="${group.language.icon}"></a>
@@ -259,14 +264,14 @@ function minDistance(s1, s2) {
                 ${group.list.map(item => `
                 <li>
                     <a href="${item.href}" class="title" target="_blank">${item.title}</a>
-                    <span>${item.pages}</span> ${item.torrentHref ? `<a href="${item.torrentHref}" width=15 onclick="return popUp('${item.torrentHref}', 610, 590)" target="_blank"><img src="https://ehgt.org/g/t.png" alt="T" title="Show torrents"></a>` : ''}
+                    <span>${item.pages ?? ''}</span> ${item.torrentHref ? `<a href="${item.torrentHref}" width=15 onclick="return popUp('${item.torrentHref}', 610, 590)" target="_blank"><img src="https://ehgt.org/g/t.png" alt="T" title="Show torrents"></a>` : ''}
                 </li>
                 `).join('')}
             </ul>
         </div>
         `).join('');
-    }else {
-        box.innerHTML = "未找到";
+    } else {
+        box.innerHTML = '未找到';
     }
-    console.log("dataList", dataList, languageGroup);
+    //console.log("dataList", dataList, languageGroup);
 })();
